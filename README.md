@@ -115,15 +115,28 @@ pip install -r requirements.txt
 
 ### 3️⃣ Configurar a API da Groq
 
-Crie um arquivo `.env` na raiz do projeto:
+Cada pessoa usa a sua própria chave da Groq. A chave é gratuita (com limite de requisições) e não vem no repositório.
+
+**Como criar a chave:**
+
+1. Acesse https://console.groq.com e crie uma conta (ou entre com Google/GitHub)
+2. No menu, abra **API Keys** (ou vá direto em https://console.groq.com/keys)
+3. Clique em **Create API Key**, dê um nome (ex: `rag-doc-financeiro`) e confirme
+4. Copie a chave gerada (começa com `gsk_`). Ela só é exibida uma vez; se perder, crie outra
+
+**Como configurar no projeto:**
+
+Crie um arquivo chamado `.env` na raiz do projeto (mesma pasta do `dsa_app.py`) com o conteúdo:
 
 ```bash
 GROQ_API_KEY=sua_chave_aqui
 ```
 
-A chave é gratuita e pode ser gerada em https://console.groq.com/keys.
+Substitua `sua_chave_aqui` pela chave copiada, sem aspas e sem espaços.
 
-> ⚠️ Nunca faça commit do `.env`. O `.gitignore` do repositório já ignora o `.env`, a pasta `venv/` e a `chroma_db_persist/`.
+> ⚠️ Nunca faça commit do `.env` nem compartilhe sua chave. O `.gitignore` do repositório já ignora o `.env`, a pasta `venv/` e a `chroma_db_persist/`.
+
+Se a chave não for encontrada, o app mostra a mensagem "A GROQ_API_KEY não foi encontrada." e não inicia.
 
 ### 4️⃣ Executar a aplicação
 
