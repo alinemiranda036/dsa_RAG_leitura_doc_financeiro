@@ -77,9 +77,10 @@ dsa_RAG_leitura_doc_financeiro/
 ├── dsa_app.py                    # Aplicação Streamlit principal
 ├── comparar_embeddings.py        # Script para comparar modelos de embedding
 ├── requirements.txt              # Dependências do projeto
-├── .env.example                  # Exemplo de variáveis de ambiente (se existir)
-├── chroma_db_persist/            # Banco vetorial persistido localmente
-├── demonstrativo_financeiro.pdf  # Documento usado para testes (se presente)
+├── demonstrativo_financeiro.pdf  # Documento fictício usado para testes
+├── .gitignore                    # Arquivos que não devem ir para o Git (.env, venv, banco vetorial)
+├── .env                          # Você cria (passo 3) - não vem no repositório
+├── chroma_db_persist/            # Criado automaticamente no primeiro upload de PDF
 └── README.md                     # Este arquivo
 ```
 
@@ -87,11 +88,13 @@ dsa_RAG_leitura_doc_financeiro/
 
 ### 1️⃣ Pré-requisitos
 
-- Python 3.10+
+- Python 3.11 ou superior (testado em 3.11 e 3.12; em 3.10 a instalação falha)
 - pip
 - Chave da API Groq
 - Arquivo PDF financeiro para upload
 - Ambiente virtual recomendado
+- Espaço em disco: reserve cerca de 8 GB para as dependências (o PyTorch é o maior pacote) e mais ~2 GB se for rodar o `comparar_embeddings.py` com o `BAAI/bge-m3`
+- Internet na primeira execução, para baixar o modelo de embeddings do Hugging Face
 
 ### 2️⃣ Instalação
 
@@ -118,6 +121,10 @@ Crie um arquivo `.env` na raiz do projeto:
 GROQ_API_KEY=sua_chave_aqui
 ```
 
+A chave é gratuita e pode ser gerada em https://console.groq.com/keys.
+
+> ⚠️ Nunca faça commit do `.env`. O `.gitignore` do repositório já ignora o `.env`, a pasta `venv/` e a `chroma_db_persist/`.
+
 ### 4️⃣ Executar a aplicação
 
 ```bash
@@ -132,6 +139,15 @@ A interface será aberta em `http://localhost:8501`.
 2. Aguarde o processamento do documento
 3. Faça uma pergunta em português sobre o arquivo
 4. O sistema buscará chunks relevantes e gerará resposta
+
+**Para conferir se está tudo funcionando**, faça upload do `demonstrativo_financeiro.pdf` que acompanha o repositório. A mensagem de sucesso deve indicar 4 chunks criados, e as respostas esperadas são:
+
+| Pergunta | Resposta esperada |
+|---------|-------------------|
+| Qual o lucro líquido da empresa? | R$ 2.450.000 |
+| Qual o fluxo de caixa operacional? | R$ 3.100.000 |
+| Qual o valor do patrimônio líquido? | R$ 14.900.000 |
+| Quanto foi investido em novos equipamentos? | R$ 900.000 |
 
 ## 🔧 Componentes Principais
 
@@ -180,6 +196,12 @@ Este script compara diferentes modelos de embeddings em cima do mesmo PDF e das 
 - testar qualidade de recuperação
 - identificar qual modelo retorna melhor contexto
 - comparar tempo de carregamento, indexação e busca
+
+**Como rodar:**
+
+```bash
+python comparar_embeddings.py
+```
 
 **Modelos comparados:**
 - `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`
@@ -297,6 +319,12 @@ Este projeto inclui um script para comparar diferentes embeddings em termos de:
 - ⚠️ Sempre verifique dados sensíveis antes de enviar para modelos externos
 - ⚠️ O projeto é voltado para uso educacional e prototipagem
 
+## ⚠️ Limitações Conhecidas
+
+- **Chunks duplicados**: cada upload adiciona os chunks à mesma coleção do ChromaDB, mesmo que o PDF já tenha sido processado. Antes de reprocessar um documento, apague a pasta `chroma_db_persist/`.
+- **Troca de PDF na mesma sessão**: o cache do Streamlit pode manter o primeiro documento carregado. Para trocar de PDF, apague a pasta `chroma_db_persist/` e reinicie a aplicação.
+- **Benchmark de embeddings com PDF pequeno**: o `demonstrativo_financeiro.pdf` gera apenas 4 chunks e a busca retorna 3, então todos os modelos tendem a acertar quase tudo. Para um ranking que diferencie os modelos, use um PDF maior e ajuste `PDF_PATH` e `PERGUNTAS_TESTE` no script.
+
 ## 📈 Melhorias Futuras
 
 - [ ] Suporte a múltiplos PDFs ao mesmo tempo
@@ -339,7 +367,3 @@ Para dúvidas ou problemas:
 - [Groq API Docs](https://console.groq.com/docs)
 - [PyPDF Documentation](https://pypdf.readthedocs.io/)
 - [RAG Best Practices](https://python.langchain.com/docs/tutorials/retrievers/)
-
----
-
-**Desenvolvido com ❤️ para a comunidade de IA aplicada a documentos financeiros**
