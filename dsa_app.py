@@ -203,7 +203,7 @@ with st.sidebar:
     with st.sidebar.expander("🆘 Suporte / Fale conosco", expanded = False):
         
         # Exibe o email de suporte dentro do expander
-        st.write("Se tiver dúvidas envie mensagem para suporte@datascienceacademy.com.br")
+        st.write("Se tiver dúvidas envie mensagem para aline.abm97@gmail.com")
 
     # Exibe um aviso informativo sobre possíveis imprecisões nas respostas da IA
     st.sidebar.info("Aviso: IA pode gerar respostas imprecisas, incompletas ou erradas. Sempre verifique informações críticas antes de confiar totalmente no resultado.")
@@ -325,8 +325,4 @@ else:
     
     # Cria um input desabilitado, orientando o usuário a fazer upload antes
     st.text_input("Faça sua pergunta...", disabled = True)
-
-
-
-
 
