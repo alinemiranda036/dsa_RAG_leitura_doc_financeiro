@@ -1,0 +1,23 @@
+# Variáveis de ambiente (contém a GROQ_API_KEY) - nunca versionar
+.env
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+
+# Banco vetorial gerado localmente pelo app
+chroma_db_persist/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Configurações locais do Streamlit (podem conter segredos)
+.streamlit/secrets.toml
+
+# Arquivos de sistema e de editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
